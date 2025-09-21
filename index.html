@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Te Quiero 🌻</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&display=swap');
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:#330233;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:'Playfair Display', serif;
+      overflow-x:hidden;
+    }
+    .main-container{width:100%;max-width:800px;padding:40px 20px;text-align:center;position:relative}
+    .title{font-family:'Dancing Script',cursive;font-size:5rem;color:#fff;text-shadow:3px 3px 6px rgba(0,0,0,.3);margin-bottom:10px}
+    .subtitle{font-family:'Dancing Script',cursive;font-size:2rem;color:#fff;text-shadow:3px 3px 6px #dda3dd;margin-bottom:50px}
+    .photo-frame{position:relative;width:350px;height:350px;margin:0 auto 50px;border-radius:50%;padding:8px;background:linear-gradient(45deg,#ffd700,#ffeb3b,#fff176);box-shadow:0 20px 40px rgba(0,0,0,.2)}
+    .photo-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;background:#fff}
+    .photo-inner img{width:100%;height:100%;object-fit:cover;display:block}
+
+    /* CONTENEDOR DE FLORES (centrado absoluto) */
+    .flowers-container{
+      position:absolute;
+      inset:0;
+      width:480px;height:480px;
+      left:50%;top:50%;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+    }
+
+    .flower{position:absolute;width:70px;height:70px;display:block}
+
+    /* posiciones alrededor del marco */
+    .flower:nth-child(1){right:100px;top:360px}
+    .flower:nth-child(2){right:300px;top:360px;}
+    .flower:nth-child(3){left:50%;top:380px;transform:translateX(-50%)}
+
+    .sunflower{position:relative;width:70px;height:70px;display:block}
+
+    /* PETALS: ahora cada pétalo parte exactamente del centro del girasol
+       usamos left:50%/top:50% y transform: rotate(...) translateY(-R)
+       con transform-origin: 50% 100% (base del pétalo) */
+    .petals{position:absolute;left:50%;top:50%;width:100%;height:100%;transform:translate(-50%,-50%)}
+    .petal{
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:22px;
+      height:44px;
+      margin-left:-11px; /* centrar según ancho */
+      margin-top:-44px;  /* colocar la base en el centro antes de transformar */
+      background:radial-gradient(circle at 30% 20%, #ffe066, #ffb347 70%);
+      border-radius:12px 12px 6px 6px;
+      transform-origin:50% 100%;
+      box-shadow:0 3px 6px rgba(0,0,0,.18);
+      z-index:1;
+    }
+    /* Aplicamos rotación + traslación hacia fuera (el translateY mueve el pétalo desde el centro hacia afuera) */
+    .petal:nth-child(1){ transform: rotate(0deg) translateY(-28px) }
+    .petal:nth-child(2){ transform: rotate(30deg) translateY(-28px) }
+    .petal:nth-child(3){ transform: rotate(60deg) translateY(-28px) }
+    .petal:nth-child(4){ transform: rotate(90deg) translateY(-28px) }
+    .petal:nth-child(5){ transform: rotate(120deg) translateY(-28px) }
+    .petal:nth-child(6){ transform: rotate(150deg) translateY(-28px) }
+    .petal:nth-child(7){ transform: rotate(180deg) translateY(-28px) }
+    .petal:nth-child(8){ transform: rotate(210deg) translateY(-28px) }
+    .petal:nth-child(9){ transform: rotate(240deg) translateY(-28px) }
+    .petal:nth-child(10){ transform: rotate(270deg) translateY(-28px) }
+    .petal:nth-child(11){ transform: rotate(300deg) translateY(-28px) }
+    .petal:nth-child(12){ transform: rotate(330deg) translateY(-28px) }
+
+    /* CENTRO: aseguramos que esté exactamente en el mismo punto (50%/50%)
+       y encima de los pétalos (z-index mayor) */
+    .center{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      width:60px;height:60px;border-radius:50%;
+      background:radial-gradient(circle at 35% 30%, #7a4e2b, #492a14);
+      box-shadow:inset 0 3px 6px rgba(0,0,0,.4);
+      z-index:3;
+    }
+
+    .message{font-family:'Dancing Script',cursive;font-size:3.5rem;color:#fff;text-shadow:2px 2px 4px rgba(0,0,0,.3);margin-top:10px}
+
+    /* corazones: sin cambios funcionales, solo mejor visibilidad */
+    .hearts{position:fixed;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+    .heart{position:absolute;font-size:20px;color:#ff6b9d;animation:floatUp 8s linear infinite;opacity:.9}
+
+    @keyframes floatUp{
+      0%{transform:translateY(100vh) rotate(0deg);opacity:0}
+      10%{opacity:.9}
+      90%{opacity:.9}
+      100%{transform:translateY(-100px) rotate(360deg);opacity:0}
+    }
+
+    @media (max-width:768px){ .title{font-size:3.5rem} .photo-frame{width:280px;height:280px} .flowers-container{width:400px;height:400px} .message{font-size:2.5rem} }
+    @media (max-width:480px){ .title{font-size:2.8rem;margin-bottom:30px} .photo-frame{width:220px;height:220px;margin-bottom:30px} .flowers-container{width:320px;height:320px} .message{font-size:2rem} .main-container{padding:20px 15px} }
+  </style>
+</head>
+<body>
+  <div class="hearts" id="hearts"></div>
+  <div class="main-container">
+    <h1 class="title">Te Quiero Milagros🌻</h1>
+    <h1 class="subtitle">Feliz dia de la primavera</h1>
+
+    <div class="photo-frame">
+      <div class="photo-inner"><img src="mili.jpg" alt="foto"></div>
+
+      <div class="flowers-container">
+        <!-- ocho girasoles fijos; cada uno con 12 pétalos y centro -->
+        <div class="flower">
+          <div class="sunflower">
+            <div class="petals">
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            </div>
+            <div class="center"></div>
+          </div>
+        </div>
+
+        <div class="flower">
+          <div class="sunflower">
+            <div class="petals">
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            </div>
+            <div class="center"></div>
+          </div>
+        </div>
+
+        <div class="flower">
+          <div class="sunflower">
+            <div class="petals">
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+              <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            </div>
+            <div class="center"></div>
+          </div>
+        </div>
+      </div> <!-- flowers-container -->
+    </div> <!-- photo-frame -->
+
+    <!-- <div class="message">Te Quiero</div> -->
+  </div>
+
+  <script>
+    // corazones más intensos
+    function createHeart(){
+      const h = document.createElement('div');
+      h.className='heart';
+      h.innerText='❤️';
+      h.style.left = Math.random()*100 + 'vw';
+      h.style.fontSize = (Math.random()*18 + 12) + 'px';
+      h.style.animationDuration = (Math.random()*4 + 5) + 's';
+      document.getElementById('hearts').appendChild(h);
+      setTimeout(()=>h.remove(), 11000);
+    }
+    // más frecuentes
+    setInterval(createHeart, 350);
+    for(let i=0;i<10;i++){ setTimeout(createHeart, i*200) }
+  </script>
+</body>
+</html>
